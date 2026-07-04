@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DataShare - Send to PC</title>
+<link rel="stylesheet" href="upload.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Send to PC</h1>
+    <p class="subtitle">Choose files or a whole folder to send</p>
+
+    <div class="drop-zone" id="dropZone">
+      <p>Tap to choose, or drag files here</p>
+      <input type="file" id="fileInput" multiple hidden>
+    </div>
+
+    <div class="button-row">
+      <button id="pickFilesBtn">Choose files</button>
+      <button id="pickFolderBtn">Choose folder</button>
+    </div>
+    <input type="file" id="folderInput" webkitdirectory directory multiple hidden>
+
+    <div id="selectedList" class="selected-list"></div>
+
+    <button id="sendBtn" class="send-btn" disabled>Send</button>
+
+    <div id="progressWrap" class="progress-wrap" hidden>
+      <div id="progressBar" class="progress-bar"></div>
+    </div>
+    <p id="statusText" class="status-text"></p>
+  </div>
+
+  <script src="upload.js"></script>
+</body>
+</html>

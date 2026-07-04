@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>DataShare</title>
+<link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <h2>Scan to send</h2>
+      <img id="qrImage" alt="QR code" class="qr-image">
+      <p class="url-text" id="urlText"></p>
+      <label class="ip-label" for="ipSelect">Wrong link? Pick correct network</label>
+      <select id="ipSelect" class="ip-select"></select>
+      <button id="openFolderBtn" class="ghost-btn">Open storage folder</button>
+    </aside>
+
+    <main class="main">
+      <h1>Received files</h1>
+      <div id="fileList" class="file-list">
+        <p class="empty-state" id="emptyState">No files received yet. Scan the QR code from a mobile device to start.</p>
+      </div>
+    </main>
+  </div>
+
+  <!-- socket.io client is auto-served by the local server -->
+  <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+  <script src="dashboard.js"></script>
+</body>
+</html>

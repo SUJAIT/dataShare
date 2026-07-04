@@ -1,0 +1,29 @@
+name: Build and Release
+
+# Trigger: run this workflow whenever you push a version tag like v1.0.0
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build and publish installer to GitHub Release
+        run: npm run build -- --publish always
+        env:
+          # GITHUB_TOKEN is auto-provided by GitHub Actions, no setup needed
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

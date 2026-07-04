@@ -1,0 +1,9 @@
+এখানে একটা icon.ico ফাইল রাখতে হবে (নাম অবশ্যই icon.ico)।
+
+কীভাবে বানাবেন:
+1. একটা 512x512 PNG লোগো বানান (Canva / Figma / যেকোনো টুলে)
+2. https://icoconvert.com অথবা https://convertio.co/png-ico/ দিয়ে .ico তে convert করুন
+3. ফাইলটার নাম দিন icon.ico আর এই build/ ফোল্ডারেই রাখুন
+
+Icon না থাকলে build fail করবে, কারণ package.json এ "icon": "build/icon.ico" সেট করা আছে।
+যদি এখনই icon বানাতে না চান, package.json থেকে win.icon লাইনটা মুছে দিলে ডিফল্ট Electron icon দিয়ে build হয়ে যাবে।
