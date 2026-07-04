@@ -6,7 +6,16 @@ const multer = require('multer');
 const { Server } = require('socket.io');
 const mime = require('mime-types');
 
-const STORAGE_DIR = path.join(__dirname, '..', 'storage');
+let STORAGE_DIR;
+try {
+  const { app } = require('electron');
+  STORAGE_DIR = app.isPackaged
+    ? path.join(app.getPath('userData'), 'storage')
+    : path.join(__dirname, '..', 'storage');
+} catch (err) {
+  // Not running inside Electron (e.g. unit tests) - safe fallback
+  STORAGE_DIR = path.join(__dirname, '..', 'storage');
+}
 
 // Make sure storage folder exists
 if (!fs.existsSync(STORAGE_DIR)) {
@@ -18,23 +27,17 @@ function startServer(port = 3000) {
   const server = http.createServer(app);
   const io = new Server(server);
 
-  // Serve the mobile upload page (plain HTML/CSS/JS, no app install needed)
   app.use(express.static(path.join(__dirname, '..', 'public')));
 
-  // express.static only auto-serves "index.html" for "/" - our page is
-  // named upload.html, so we need this explicit route for the QR link
-  // (http://<ip>:3000/) to actually open the upload page.
   app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'public', 'upload.html'));
   });
 
-  // Serve already-received files so the dashboard can preview them
   app.use('/files-data', express.static(STORAGE_DIR));
 
   const storage = multer.diskStorage({
     destination: (req, file, cb) => cb(null, STORAGE_DIR),
     filename: (req, file, cb) => {
-      // Prevent overwriting files with the same name
       const timestamp = Date.now();
       const safeName = `${timestamp}-${file.originalname}`;
       cb(null, safeName);
@@ -43,7 +46,6 @@ function startServer(port = 3000) {
 
   const upload = multer({ storage });
 
-  // Mobile uploads one or many files/folders here
   app.post('/upload', upload.array('files'), (req, res) => {
     const uploaded = req.files.map((file) => ({
       name: file.originalname,
@@ -54,13 +56,11 @@ function startServer(port = 3000) {
       receivedAt: new Date().toISOString()
     }));
 
-    // Push each new file to the PC dashboard instantly
     uploaded.forEach((fileInfo) => io.emit('new-file', fileInfo));
 
     res.json({ success: true, files: uploaded });
   });
 
-  // Dashboard can ask for the full list on startup
   app.get('/files', (req, res) => {
     const files = fs.readdirSync(STORAGE_DIR)
       .filter((storedName) => !storedName.startsWith('.'))

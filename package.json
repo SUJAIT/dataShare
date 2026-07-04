@@ -32,13 +32,13 @@
       "**/*",
       "!storage/*"
     ],
-    "extraResources": [
-      {
-        "from": "storage",
-        "to": "storage",
-        "filter": ["**/*"]
-      }
-    ],
+"extraResources": [
+  {
+    "from": "storage",
+    "to": "storage",
+    "filter": ["**/*"]
+  }
+],
     "win": {
       "target": ["nsis", "portable"],
       "icon": "build/icon.ico"
