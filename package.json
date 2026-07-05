@@ -1,6 +1,6 @@
 {
   "name": "datashare-app",
-  "version": "1.0.0",
+  "version": "1.0.5",
   "description": "PC based local data share app - scan QR from mobile and share files instantly",
   "main": "main.js",
 "scripts": {
